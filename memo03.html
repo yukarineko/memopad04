@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>授業申し込みフォーム</title>
+    <link rel="stylesheet" href="css/memo.css">
+</head>
+
+<body>
+    <header>
+        <div class="head_logo">
+            <img src="img/pipette01.png" alt="School Pipetteのロゴ">
+            <p class="header-text">～学校と社会の必要を補い合う～</p>
+        </div>
+    </header>
+
+    <main class="contact">
+        <div class="form-wrapper">
+            <h2 class="contact_title text-center">授業お申込みフォーム</h2>
+            <form action="" method="post">
+                <dl class="form-inner">
+                    <p id="error_message" class="error-message"></p>
+                    <dt class="form-title">会社名・団体名</dt>
+                    <dd class="form-item"><input type="text" name="name" id="company_name" class="form-parts"
+                            title="会社名・団体名を入力してください">
+                    </dd>
+                    <dt class="form-title">住所</dt>
+                    <dd class="form-item"><input type="text" name="place" id="location" class="form-parts"
+                            placeholder="住所を入力してください"></dd>
+                    <dt class="form-title">メールアドレス</dt>
+                    <dd class="form-item"><input type="text" name="email" id="email" class="form-parts"
+                            title="メールアドレスを入力してください"></dd>
+                    <dt class="form-title">授業内容</dt>
+                    <dd class="form-item"><textarea id="text_area" title="授業内容を入力してください"></textarea></dd>
+                    <dt class="form-title check-radio">授業形態</dt>
+                    <dd class="form-item">
+                        <label for="delivery" class="form-label"><input type="radio" name="kind" id="delivery"
+                                value="出前授業">出前授業</label>
+                        <label for="online" class="form-label"><input type="radio" name="kind" id="online"
+                                value="オンライン授業">オンライン授業</label>
+                        <label for="both" class="form-label"><input type="radio" name="kind" id="both"
+                                value="どちらも可能">どちらも可能</label>
+                    </dd>
+                    <dt class="form-title check-radio">キャリア教育授業</dt>
+                    <dd class="form-item">
+                        <label for="yes" class="form-label"><input type="radio" name="kind2" id="yes"
+                                value="可能">可能</label>
+                        <label for="wait" class="form-label"><input type="radio" name="kind2" id="wait"
+                                value="検討中">検討中</label>
+                        <label for="no" class="form-label"><input type="radio" name="kind2" id="no"
+                                value="不可能">不可能</label>
+                    </dd>
+                    <dt class="form-title">その他</dt>
+                    <dd class="form-item"><textarea name="detail" id="text_area2"
+                            placeholder="お問い合わせ内容があれば入力してください"></textarea></dd>
+                </dl>
+                <input type="submit" value="送信" class="btn btn-submit" id="save">
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <small>School Pipette</small>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            //配列を準備
+            const history = [];
+
+            //データを保存する
+            $("#save").on("click", function (event) {
+                event.preventDefault();
+
+                // 必須項目のチェック
+                const companyName = $("#company_name").val();
+                const location = $("#location").val();
+                const email = $("#email").val();
+                const textArea = $("#text_area").val();
+                const lessonType = $("input[name='kind']:checked").val();
+                const careerLesson = $("input[name='kind2']:checked").val();
+
+                // 未入力項目のチェックとメッセージ表示
+                const errorMessage = $("#error_message");
+                if (!companyName || !location || !email || !textArea || !lessonType || !careerLesson) {
+                    errorMessage.text("未入力の項目があります。すべての項目を入力してください。");
+                    errorMessage.addClass("show-error");//エラーメッセージのスタイルを変更するためのクラスを追加
+                    errorMessage[0].scrollIntoView({ behavior: "smooth", block: "center" });//スクロール位置を中央に配置
+                    return;
+                } else {
+                    errorMessage.text(""); // エラーメッセージをクリアする
+                    errorMessage.removeClass("show-error");//エラーメッセージのスタイルをリセット
+                }
+
+                //企業名・団体名
+                const text = $("#company_name").val();
+                console.log(text);
+                const data = { companyName: text };
+
+                //住所
+                const text2 = $("#location").val();
+                console.log(text2);
+                const data2 = { locationName: text2 };
+
+                //メールアドレス
+                const text3 = $("#email").val();
+                console.log(text3);
+                const data3 = { emailName: text3 };
+
+                //授業内容
+                const text4 = $("#text_area").val();
+                console.log(text4);
+                const data4 = { textArea: text4 };
+
+                //授業形態
+                const selectedRadioValue = $("input[name='kind']:checked").val();
+                console.log(selectedRadioValue);
+                const data5 = { lessonType: selectedRadioValue };
+
+                //キャリア教育
+                const selectedRadioValue2 = $("input[name='kind2']:checked").val();
+                console.log(selectedRadioValue2);
+                const data6 = { careerLesson: selectedRadioValue2 };
+
+                //問い合わせ
+                const text7 = $("#text_area2").val();
+                console.log(text7);
+                const data7 = { textArea2: text7 };
+
+                // data1～7を1つのオブジェクトにまとめる
+                const formData = {
+                    data1: data,
+                    data2: data2,
+                    data3: data3,
+                    data4: data4,
+                    data5: data5,
+                    data6: data6,
+                    data7: data7,
+                };
+
+                // 配列にformDataを格納し、新しいものが最新にくるようにする
+                history.unshift(formData);
+
+                // 配列をローカルストレージに保存する
+                const json = JSON.stringify(history);
+                localStorage.setItem("memo1", json);
+                // フォームをクリアする
+                $("#company_name").val("");
+                $("#location").val("");
+                $("#email").val("");
+                $("#text_area").val("");
+                $("input[name='kind']").prop("checked", false);
+                $("input[name='kind2']").prop("checked", false);
+                $("#text_area2").val("");
+            });
+
+            // 削除ボタンの処理
+            $("#clear").on("click", function () {
+                localStorage.removeItem("memo1");
+                history.length = 0; // 配列もクリアする
+                $("#company_name").val("");
+                $("#location").val("");
+                $("#email").val("");
+                $("#text_area").val("");
+                $("input[name='kind']").prop("checked", false);
+                $("input[name='kind2']").prop("checked", false);
+                $("#text_area2").val("");
+            });
+        });
+    </script>
